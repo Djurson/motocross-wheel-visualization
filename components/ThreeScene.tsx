@@ -1,8 +1,7 @@
 "use client";
 
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import { FrontWheel } from "./frontwheel";
 import { RearWheel } from "./rearwheel";
 
