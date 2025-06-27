@@ -67,8 +67,7 @@ npm run dev
 │
 ├── components/
 │   ├── ThreeScene.tsx              -- Main component rendering the Canvas
-│   ├── FrontWheel.tsx              -- Front wheel component loading respective GLB model and handling materials/colors
-│   └── RearWheel.tsx               -- Rear wheel component loading respective GLB model and handling materials/colors
+│   └── Wheel.tsx                   -- Component for loading respective GLB model and handling materials/colors
 │
 ├── public/
 │   ├── FrontWheel.glb              -- 3D model of the front wheel

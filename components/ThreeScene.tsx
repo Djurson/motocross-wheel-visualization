@@ -2,8 +2,7 @@
 
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
-import { FrontWheel } from "./frontwheel";
-import { RearWheel } from "./rearwheel";
+import { Wheel } from "./wheel";
 
 const ThreeScene = () => {
   const [colors, setColors] = useState({
@@ -27,6 +26,7 @@ const ThreeScene = () => {
     if (Object.keys(newColors).length > 0) {
       setColors((prev) => ({ ...prev, ...newColors }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -55,8 +55,8 @@ const ThreeScene = () => {
           <directionalLight intensity={1} position={[2, 0, 5]} />
           <ambientLight intensity={1} position={[0, 0, 2]} />
           <Suspense fallback={null}>
-            <FrontWheel colors={colors} />
-            <RearWheel colors={colors} />
+            <Wheel colors={colors} variant="front" />
+            <Wheel colors={colors} variant="rear" />
           </Suspense>
         </Canvas>
       </div>
