@@ -18,7 +18,7 @@ const ThreeScene = () => {
     const newColors: Partial<typeof colors> = {};
 
     for (const key of Object.keys(colors)) {
-      const param = params.get(key); // förväntar: ?Hub=ff0000&Spokes=00ff00 ...
+      const param = params.get(key);
       if (param) {
         newColors[key as keyof typeof colors] = "#" + param.replace(/^#/, "");
       }
