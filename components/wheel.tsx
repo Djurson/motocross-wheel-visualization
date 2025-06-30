@@ -28,8 +28,8 @@ const Wheel = ({ colors, variant }: { colors: { Hub: string; Spokes: string; Rim
           mat.needsUpdate = true;
         }
 
-        mesh.receiveShadow = false;
-        mesh.castShadow = false;
+        mesh.receiveShadow = true;
+        mesh.castShadow = true;
 
         if (mesh.name === "front_wheel_hub") parts.current.FrontHub = mesh;
         if (mesh.name === "front_wheel_spokes") parts.current.FrontSpokes = mesh;
