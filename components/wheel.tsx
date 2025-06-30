@@ -6,19 +6,30 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
 
 type variant = "front" | "rear";
+type showing = "both" | "single";
 
-const Wheel = ({ colors, variant }: { colors: { Hub: string; Spokes: string; Rim: string; Nipples: string }; variant: variant }) => {
+const Wheel = ({ colors, variant, showing }: { colors: { Hub: string; Spokes: string; Rim: string; Nipples: string }; variant: variant; showing: showing }) => {
   const frontGLTF = useLoader(GLTFLoader, "/FrontWheel.glb");
   const rearGLTF = useLoader(GLTFLoader, "/RearWheel.glb");
 
   const specularMap = useLoader(TextureLoader, "/wheel_spec.png");
 
   const gltf = variant === "front" ? frontGLTF : rearGLTF;
-  const pos = variant === "front" ? [-2.2, 0, 0] : [2.2, 0, 0];
+  let pos: number[];
+  if (showing === "both") {
+    pos = variant === "front" ? [-2.2, 0, 0] : [2.2, 0, 0];
+  } else {
+    pos = [0, 0, 0];
+  }
   const parts = useRef<WheelParts>({});
 
   useEffect(() => {
-    gltf.scene.rotation.y = variant === "front" ? -Math.PI / 3 : Math.PI / 3;
+    if (showing === "both") {
+      gltf.scene.rotation.y = variant === "front" ? -Math.PI / 3 : Math.PI / 3;
+    } else {
+      gltf.scene.rotation.y = Math.PI / 3;
+    }
+
     gltf.scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;

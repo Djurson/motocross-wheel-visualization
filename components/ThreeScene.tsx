@@ -1,8 +1,15 @@
 "use client";
 
+/*
+  Example url:
+  http://localhost:3000/?wheels=Rear&rim_color=%23FFA500&hub_color=%23FFD700&spokes_color=%23C0C0C0&nipples_color=%23FF0000
+*/
+
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Wheel } from "./wheel";
+
+type show = "Both" | "Front" | "Rear";
 
 const ThreeScene = () => {
   const [colors, setColors] = useState({
@@ -12,14 +19,31 @@ const ThreeScene = () => {
     Nipples: "#ff0120",
   });
 
+  const [showing, setShowing] = useState<show>("Both");
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const newColors: Partial<typeof colors> = {};
 
-    for (const key of Object.keys(colors)) {
-      const param = params.get(key);
-      if (param) {
-        newColors[key as keyof typeof colors] = "#" + param.replace(/^#/, "");
+    // Map from URL param to state key
+    const paramMap: Record<string, keyof typeof colors> = {
+      rim_color: "Rim",
+      hub_color: "Hub",
+      spokes_color: "Spokes",
+      nipples_color: "Nipples",
+    };
+
+    const wheelsParam = params.get("wheels");
+    const validShows: show[] = ["Both", "Front", "Rear"];
+    if (wheelsParam && validShows.includes(wheelsParam as show)) {
+      setShowing(wheelsParam as show);
+    }
+
+    for (const [paramKey, stateKey] of Object.entries(paramMap)) {
+      const paramValue = params.get(paramKey);
+
+      if (paramValue) {
+        newColors[stateKey] = "#" + paramValue.replace(/^#/, "");
       }
     }
 
@@ -37,8 +61,8 @@ const ThreeScene = () => {
         <directionalLight intensity={1.5} position={[0, 0, 5]} />
         <ambientLight intensity={1.5} position={[0, 0, 2]} />
         <Suspense fallback={null}>
-          <Wheel colors={colors} variant="front" />
-          <Wheel colors={colors} variant="rear" />
+          {(showing === "Both" || showing === "Front") && <Wheel colors={colors} variant="front" showing={showing === "Both" ? "both" : "single"} />}
+          {(showing === "Both" || showing === "Rear") && <Wheel colors={colors} variant="rear" showing={showing === "Both" ? "both" : "single"} />}
         </Suspense>
       </Canvas>
     </div>

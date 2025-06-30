@@ -22,7 +22,7 @@ The models are loaded from GLB files and use textures, including specular maps f
 
   - Nipples
 
-🔜 Color settings can also be passed through URL parameters.
+Color settings can also be passed through URL parameters.
 
 ## Technologies
 
