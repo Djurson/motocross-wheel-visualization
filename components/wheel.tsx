@@ -28,6 +28,9 @@ const Wheel = ({ colors, variant }: { colors: { Hub: string; Spokes: string; Rim
           mat.needsUpdate = true;
         }
 
+        mesh.receiveShadow = false;
+        mesh.castShadow = false;
+
         if (mesh.name === "front_wheel_hub") parts.current.FrontHub = mesh;
         if (mesh.name === "front_wheel_spokes") parts.current.FrontSpokes = mesh;
         if (mesh.name === "front_wheel_rim") parts.current.FrontRim = mesh;
@@ -40,7 +43,6 @@ const Wheel = ({ colors, variant }: { colors: { Hub: string; Spokes: string; Rim
     });
   }, [gltf, specularMap, variant]);
 
-  // 2. Applicera färger
   useEffect(() => {
     let colorToMeshMap: Record<string, keyof WheelParts> = {
       Hub: "RearHub",

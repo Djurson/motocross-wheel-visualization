@@ -8,7 +8,7 @@ const ThreeScene = () => {
   const [colors, setColors] = useState({
     Hub: "#ff0000",
     Spokes: "#ffffff",
-    Rim: "#3b3b3b",
+    Rim: "#000000",
     Nipples: "#ff0120",
   });
 
@@ -26,40 +26,21 @@ const ThreeScene = () => {
     if (Object.keys(newColors).length > 0) {
       setColors((prev) => ({ ...prev, ...newColors }));
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div>
-      <div style={{ position: "absolute", top: 10, left: 10, zIndex: 10 }}>
-        <label>
-          Navfärg:
-          <input type="color" value={colors.Hub} onChange={(e) => setColors({ ...colors, Hub: e.target.value })} />
-        </label>
-        <label>
-          Ekrar:
-          <input type="color" value={colors.Spokes} onChange={(e) => setColors({ ...colors, Spokes: e.target.value })} />
-        </label>
-        <label>
-          Fälgbana:
-          <input type="color" value={colors.Rim} onChange={(e) => setColors({ ...colors, Rim: e.target.value })} />
-        </label>
-        <label>
-          Nipplar:
-          <input type="color" value={colors.Nipples} onChange={(e) => setColors({ ...colors, Nipples: e.target.value })} />
-        </label>
-      </div>
-      <div style={{ width: "100vw", height: "100vh" }}>
-        <Canvas camera={{ position: [0, 0, 8], fov: 60 }} dpr={[1, 2]}>
-          <color attach="background" args={["#fff"]} />
-          <directionalLight intensity={1} position={[2, 0, 5]} />
-          <ambientLight intensity={1} position={[0, 0, 2]} />
-          <Suspense fallback={null}>
-            <Wheel colors={colors} variant="front" />
-            <Wheel colors={colors} variant="rear" />
-          </Suspense>
-        </Canvas>
-      </div>
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <Canvas camera={{ position: [0, 0, 8] }} dpr={[1, 2]}>
+        <color attach="background" args={["#fff"]} />
+        <directionalLight intensity={1} position={[2, 0, 5]} />
+        <ambientLight intensity={2.5} position={[0, 0, 2]} />
+        <Suspense fallback={null}>
+          <Wheel colors={colors} variant="front" />
+          <Wheel colors={colors} variant="rear" />
+        </Suspense>
+      </Canvas>
     </div>
   );
 };
