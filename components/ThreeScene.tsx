@@ -34,8 +34,8 @@ const ThreeScene = () => {
     <div style={{ width: "100vw", height: "100vh" }}>
       <Canvas camera={{ position: [0, 0, 8] }} dpr={[1, 2]}>
         <color attach="background" args={["#fff"]} />
-        <directionalLight intensity={1} position={[2, 0, 5]} />
-        <ambientLight intensity={2.5} position={[0, 0, 2]} />
+        <directionalLight intensity={1.5} position={[0, 0, 5]} />
+        <ambientLight intensity={1.5} position={[0, 0, 2]} />
         <Suspense fallback={null}>
           <Wheel colors={colors} variant="front" />
           <Wheel colors={colors} variant="rear" />

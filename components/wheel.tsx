@@ -25,6 +25,8 @@ const Wheel = ({ colors, variant }: { colors: { Hub: string; Spokes: string; Rim
         const mat = mesh.material as THREE.MeshPhongMaterial;
         if ("specularMap" in mat) {
           mat.specularMap = specularMap;
+          mat.aoMapIntensity = 2;
+          mat.emissiveIntensity = 0;
           mat.needsUpdate = true;
         }
 
