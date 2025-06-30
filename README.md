@@ -24,6 +24,8 @@ The models are loaded from GLB files and use textures, including specular maps f
 
 Color settings can also be passed through URL parameters.
 
+[Example visualization](https://motocross-wheel-visualization.vercel.app/?wheels=Rear&rim_color=%23FFA500&hub_color=%23FFD700&spokes_color=%23C0C0C0&nipples_color=%23FF0000)
+
 ## Technologies
 
 - [Next.js 15](https://nextjs.org/)

@@ -1,10 +1,5 @@
 "use client";
 
-/*
-  Example url:
-  http://localhost:3000/?wheels=Rear&rim_color=%23FFA500&hub_color=%23FFD700&spokes_color=%23C0C0C0&nipples_color=%23FF0000
-*/
-
 import React, { Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Wheel } from "./wheel";
