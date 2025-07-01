@@ -1,5 +1,5 @@
 import { useLoader } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useMemo, useEffect } from "react";
 import { WheelParts } from "./types";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
@@ -11,23 +11,17 @@ const Wheel = ({ colors, variant, showing }: { colors: { Hub: string; Spokes: st
   const frontGLTF = useLoader(GLTFLoader, "/FrontWheelV2.glb");
   const rearGLTF = useLoader(GLTFLoader, "/RearWheelV2.glb");
 
-  // const specularMap = useLoader(TextureLoader, "/wheel_spec.png");
-
   const gltf = variant === "front" ? frontGLTF : rearGLTF;
-  let pos: number[];
-  if (showing === "both") {
-    pos = variant === "front" ? [-2.2, 0, 0] : [2.2, 0, 0];
-  } else {
-    pos = [0, 0, 0];
-  }
-  const parts = useRef<WheelParts>({});
 
-  useEffect(() => {
+  const position = useMemo(() => {
     if (showing === "both") {
-      gltf.scene.rotation.y = variant === "front" ? Math.PI + -Math.PI / 3 : Math.PI / 3;
-    } else {
-      gltf.scene.rotation.y = Math.PI / 3;
+      return variant === "front" ? [-2.2, 0, 0] : [2.2, 0, 0];
     }
+    return [0, 0, 0];
+  }, [variant, showing]);
+
+  const parts = useMemo(() => {
+    const result: WheelParts = {};
 
     gltf.scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
@@ -37,51 +31,61 @@ const Wheel = ({ colors, variant, showing }: { colors: { Hub: string; Spokes: st
         mesh.castShadow = true;
 
         const mat = mesh.material as THREE.MeshPhysicalMaterial;
+        mat.fog = true;
         mat.roughness = 0.35;
-        mat.emissive.add(new THREE.Color(mat.color));
-        mat.emissiveIntensity = 0.15;
+        mat.emissive.set(new THREE.Color(mat.color));
+        mat.emissiveIntensity = 0.2;
 
-        if (mesh.name === "front_wheel_hub") parts.current.FrontHub = mesh;
-        if (mesh.name === "front_wheel_spokes") parts.current.FrontSpokes = mesh;
-        if (mesh.name === "front_wheel_rim") parts.current.FrontRim = mesh;
-        if (mesh.name === "front_wheel_nipples") parts.current.FrontNipples = mesh;
-        if (mesh.name === "rear_wheel_hub") parts.current.RearHub = mesh;
-        if (mesh.name === "rear_wheel_spokes") parts.current.RearSpokes = mesh;
-        if (mesh.name === "rear_wheel_rim") parts.current.RearRim = mesh;
-        if (mesh.name === "rear_wheel_spokes_nipples") parts.current.RearNipples = mesh;
+        if (mesh.name === "Front_Hub") result.FrontHub = mesh;
+        if (mesh.name === "Front_Spokes") result.FrontSpokes = mesh;
+        if (mesh.name === "Front_Rim") result.FrontRim = mesh;
+        if (mesh.name === "Front_Nipples") result.FrontNipples = mesh;
+        if (mesh.name === "Rear_Hub") result.RearHub = mesh;
+        if (mesh.name === "Rear_Spokes") result.RearSpokes = mesh;
+        if (mesh.name === "Rear_Rim") result.RearRim = mesh;
+        if (mesh.name === "Rear_Nipples") result.RearNipples = mesh;
       }
     });
-  }, [gltf, variant]);
+
+    if (showing === "both") {
+      gltf.scene.rotation.y = variant === "front" ? Math.PI + -Math.PI / 3 : Math.PI / 3;
+    } else {
+      gltf.scene.rotation.y = Math.PI / 3;
+    }
+
+    return result;
+  }, [gltf, variant, showing]);
 
   useEffect(() => {
-    let colorToMeshMap: Record<string, keyof WheelParts> = {
-      Hub: "RearHub",
-      Spokes: "RearSpokes",
-      Rim: "RearRim",
-      Nipples: "RearNipples",
-    };
+    if (!parts) return;
 
-    if (variant === "front") {
-      colorToMeshMap = {
-        Hub: "FrontHub",
-        Spokes: "FrontSpokes",
-        Rim: "FrontRim",
-        Nipples: "FrontNipples",
-      };
-    }
+    const colorToMeshMap: Record<string, keyof WheelParts> =
+      variant === "front"
+        ? {
+            Hub: "FrontHub",
+            Spokes: "FrontSpokes",
+            Rim: "FrontRim",
+            Nipples: "FrontNipples",
+          }
+        : {
+            Hub: "RearHub",
+            Spokes: "RearSpokes",
+            Rim: "RearRim",
+            Nipples: "RearNipples",
+          };
 
     for (const key of Object.keys(colors)) {
       const meshKey = colorToMeshMap[key];
-      const mesh = parts.current[meshKey];
+      const mesh = parts[meshKey];
       if (mesh) {
         const mat = mesh.material as THREE.MeshPhysicalMaterial;
-        mat.color = new THREE.Color(colors[key as keyof typeof colors]);
+        mat.color.set(colors[key as keyof typeof colors]);
         mat.needsUpdate = true;
       }
     }
-  }, [colors, variant]);
+  }, [colors, variant, parts]);
 
-  return <primitive object={gltf.scene} position={pos} scale={1} />;
+  return <primitive object={gltf.scene} position={position} scale={1} />;
 };
 
 export { Wheel };
