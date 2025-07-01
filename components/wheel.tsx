@@ -80,6 +80,7 @@ const Wheel = ({ colors, variant, showing }: { colors: { Hub: string; Spokes: st
       if (mesh) {
         const mat = mesh.material as THREE.MeshPhysicalMaterial;
         mat.color.set(colors[key as keyof typeof colors]);
+        mat.emissive.set(colors[key as keyof typeof colors]);
         mat.needsUpdate = true;
       }
     }
