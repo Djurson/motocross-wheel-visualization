@@ -52,7 +52,7 @@ const ThreeScene = () => {
   return (
     <div style={{ width: "100vw", height: "100vh" }}>
       <Canvas camera={{ position: [0, 0, 8] }} dpr={[1, 2]} shadows>
-        <fog attach="fog" args={["#595959", 5, 20]} />
+        {/* <fog attach="fog" args={["#595959", 5, 20]} /> */}
         <color attach="background" args={["#fff"]} />
         <directionalLight intensity={2} position={[0, 0, 5]} />
         <ambientLight intensity={10} position={[0, 0, 2]} />
